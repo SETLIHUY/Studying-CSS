@@ -1,0 +1,570 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>មេរៀន CSS Margin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Koulen&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout concept: one reading column; the box-model diagram opens the page as the hero, each section teaches one idea with a live demo beside the code. */
+:root {
+  --font-display: 'Koulen', 'Noto Sans Khmer', 'Khmer UI', 'Leelawadee UI', sans-serif;
+  --font-body: 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer UI', 'Leelawadee UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --bg: #f4f6f2;
+  --surface: #ffffff;
+  --surface-2: #eaf0ea;
+  --fg: #17231e;
+  --muted: #53665d;
+  --line: #d6ded5;
+  --line-strong: #9fb0a5;
+  --accent: #17624f;
+  --accent-soft: #dcebe4;
+  --accent-ink: #ffffff;
+
+  --m-bg: #fbdcbd; --m-line: #d9822f;
+  --b-bg: #f6e6a4; --b-line: #c8a627;
+  --p-bg: #c8e5cc; --p-line: #4f9b64;
+  --c-bg: #c3daf0; --c-line: #3f82bb;
+  --layer-ink: #26261f;
+
+  --code-bg: #0f1a16;
+  --code-fg: #d9e8df;
+  --code-sel: #9db9ff;
+  --code-prop: #8fd8bb;
+  --code-val: #f3c987;
+  --code-com: #7f948a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1512; --surface: #151f1a; --surface-2: #1b2822; --fg: #e5eee8; --muted: #9db0a6;
+    --line: #27362f; --line-strong: #46594f; --accent: #5fc5a5; --accent-soft: #19382e; --accent-ink: #0b1410;
+    --m-bg: #4b3421; --m-line: #d98a3d; --b-bg: #4b4421; --b-line: #c9a93a;
+    --p-bg: #234030; --p-line: #55a56d; --c-bg: #1f3b52; --c-line: #4a8cc4; --layer-ink: #f0efe6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1512; --surface: #151f1a; --surface-2: #1b2822; --fg: #e5eee8; --muted: #9db0a6;
+  --line: #27362f; --line-strong: #46594f; --accent: #5fc5a5; --accent-soft: #19382e; --accent-ink: #0b1410;
+  --m-bg: #4b3421; --m-line: #d98a3d; --b-bg: #4b4421; --b-line: #c9a93a;
+  --p-bg: #234030; --p-line: #55a56d; --c-bg: #1f3b52; --c-line: #4a8cc4; --layer-ink: #f0efe6;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.9;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 800px; margin-inline: auto; }
+.wrap > * { min-width: 0; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+p { margin: 0 0 14px; }
+h1, h2 { text-wrap: balance; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; align-items: center; padding-bottom: 36px; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 6px; line-height: 1.4; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(38px, 7vw, 60px); line-height: 1.25; margin: 0 0 12px; }
+.lead { color: var(--muted); margin: 0; }
+@media (max-width: 720px) { .hero { grid-template-columns: 1fr; } }
+
+/* box model diagram */
+.bm { position: relative; border-radius: 4px; color: var(--layer-ink); }
+.bm-m { background: var(--m-bg); border: 1.5px dashed var(--m-line); padding: 48px 52px; }
+.bm-b { background: var(--b-bg); border: 4px solid var(--b-line); padding: 34px 26px 26px; }
+.bm-p { background: var(--p-bg); border: 1.5px dashed var(--p-line); padding: 34px 22px 22px; }
+.bm-c { background: var(--c-bg); border: 1.5px solid var(--c-line); padding: 16px 8px; text-align: center; font-family: var(--font-mono); font-size: 13px; line-height: 1.4; }
+.bm-tag { position: absolute; top: 7px; left: 10px; font: 600 12px/1.2 var(--font-mono); }
+.bm .s { position: absolute; font: 600 12px/1.2 var(--font-mono); white-space: nowrap; }
+.s-t { top: 14px; left: 50%; transform: translateX(-50%); }
+.s-b { bottom: 14px; left: 50%; transform: translateX(-50%); }
+.s-l { left: 12px; top: 50%; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); }
+.s-r { right: 12px; top: 50%; writing-mode: vertical-rl; transform: translateY(-50%); }
+
+/* contents */
+.toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 4px 20px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin: 0 0 8px; list-style: none; }
+.toc a { text-decoration: none; display: flex; gap: 10px; line-height: 1.7; padding: 3px 0; }
+.toc a:hover span.t { text-decoration: underline; }
+.toc .n { color: var(--accent); font-weight: 700; min-width: 1.6em; }
+
+/* sections */
+section { padding-top: 44px; margin-top: 8px; border-top: 1px solid var(--line); }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 4.4vw, 34px); line-height: 1.4; margin: 0 0 14px; display: flex; gap: 14px; align-items: baseline; }
+h2 .num { color: var(--accent); flex: none; }
+h3 { font-size: 18px; margin: 24px 0 8px; line-height: 1.6; }
+ul.plain { margin: 0 0 14px; padding-left: 22px; }
+ul.plain li { margin-bottom: 4px; }
+
+.note { background: var(--accent-soft); border-radius: 6px; padding: 12px 16px; margin: 16px 0; }
+.note strong { color: var(--accent); }
+.note p:last-child { margin-bottom: 0; }
+
+/* code */
+pre.code { position: relative; margin: 14px 0; background: var(--code-bg); color: var(--code-fg); border-radius: 6px; padding: 16px 18px; overflow-x: auto; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; }
+pre.code code { font-size: inherit; display: block; min-width: max-content; padding-right: 64px; }
+.k-sel { color: var(--code-sel); } .k-prop { color: var(--code-prop); } .k-val { color: var(--code-val); } .k-com { color: var(--code-com); }
+.copy { position: absolute; top: 8px; right: 8px; font: 500 12px/1 var(--font-body); background: var(--code-fg); color: var(--code-bg); border: 0; border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+.copy:hover { opacity: 0.85; }
+:not(pre) > code { background: var(--surface-2); padding: 1px 6px; border-radius: 4px; }
+
+/* tables */
+.tbl { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 15.5px; line-height: 1.7; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; background: var(--surface-2); }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* demos */
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin: 14px 0; min-width: 0; }
+.demo-label { font: 600 12px/1.4 var(--font-mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
+.blk { background: var(--c-bg); border: 2px solid var(--c-line); color: var(--layer-ink); padding: 8px 12px; font: 13px/1.5 var(--font-mono); }
+.blk-m { background: var(--m-bg); border-color: var(--m-line); }
+.stripes { background: repeating-linear-gradient(45deg, var(--m-bg) 0 6px, transparent 6px 12px); outline: 1.5px dashed var(--m-line); }
+.center-parent { border: 2px dashed var(--line-strong); padding: 12px 0; }
+.center-child { width: 200px; max-width: 80%; margin: 0 auto; text-align: center; }
+.nav { display: flex; align-items: center; gap: 12px; border: 2px dashed var(--line-strong); padding: 10px 12px; flex-wrap: nowrap; }
+.nav .blk { white-space: nowrap; }
+.nav .push { margin-left: auto; }
+.neg { padding: 28px 16px 16px; border: 2px dashed var(--line-strong); }
+.neg .a { width: 62%; }
+.neg .b { width: 62%; margin-top: -18px; margin-left: 38px; }
+.pair { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 12px; font-size: 15px; }
+
+/* playground */
+.pg-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin-bottom: 14px; }
+@media (max-width: 560px) { .pg-controls { grid-template-columns: 1fr; } }
+.ctl label { display: flex; justify-content: space-between; font: 600 13px/1.4 var(--font-mono); margin-bottom: 4px; }
+.ctl output { color: var(--accent); }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.pg-stage { background-color: var(--surface-2); background-image: radial-gradient(var(--line-strong) 1px, transparent 1px); background-size: 16px 16px; border-radius: 6px; padding: 18px; overflow-x: auto; min-height: 140px; }
+.pg-ghost { display: inline-block; vertical-align: top; }
+.pg-box { width: 140px; height: 80px; background: var(--c-bg); border: 2px solid var(--c-line); color: var(--layer-ink); font: 600 13px/76px var(--font-mono); text-align: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; margin-top: 10px; color: var(--muted); line-height: 1.5; }
+.legend i { display: inline-block; width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; border: 1.5px solid; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.btn { font: 500 14px/1 var(--font-body); background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+
+/* collapse demo */
+.cl-wrap { display: flow-root; }
+.cl-a { margin-bottom: 40px; }
+.cl-b { margin-top: 30px; }
+.result { font-weight: 600; margin-top: 12px; }
+
+/* card sample */
+.demo-card { max-width: 320px; margin: 0 auto; padding: 20px; border: 2px solid var(--fg); border-radius: 12px; background: var(--bg); line-height: 1.6; }
+.demo-card h4 { margin: 0 0 8px; font-size: 18px; }
+.demo-card p { margin: 0 0 16px; font-size: 15px; color: var(--muted); }
+
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin: 10px 0; padding: 4px 16px; }
+summary { cursor: pointer; padding: 8px 0; font-weight: 600; }
+details[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+details .ans { padding-bottom: 8px; }
+.sum li { margin-bottom: 6px; }
+footer { margin-top: 48px; color: var(--muted); font-size: 14px; }
+</style>
+
+<div class="wrap" lang="km">
+
+<header class="hero">
+  <div>
+    <p class="eyebrow">CSS · Box Model</p>
+    <h1>មេរៀន CSS Margin</h1>
+    <p class="lead">មេរៀននេះពន្យល់ពី <code>margin</code>, <code>margin-top</code>, <code>margin-right</code>, <code>margin-bottom</code> និង <code>margin-left</code> ជាជំហានៗ។ មានឧទាហរណ៍ដែលអ្នកអាចកែតម្លៃដោយខ្លួនឯង និងលក្ខណៈ CSS ផ្សេងទៀតដែលត្រូវប្រើជាមួយគ្នា។</p>
+  </div>
+  <div class="bm bm-m" role="img" aria-label="រូប Box Model៖ margin នៅខាងក្រៅបំផុត បន្ទាប់មក border, padding និង content">
+    <span class="s s-t">margin-top</span>
+    <span class="s s-b">margin-bottom</span>
+    <span class="s s-l">margin-left</span>
+    <span class="s s-r">margin-right</span>
+    <div class="bm bm-b">
+      <span class="bm-tag">border</span>
+      <div class="bm bm-p">
+        <span class="bm-tag">padding</span>
+        <div class="bm-c">content</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<ol class="toc" aria-label="មាតិកា">
+  <li><a href="#intro"><span class="n">១</span><span class="t">margin គឺអ្វី?</span></a></li>
+  <li><a href="#four"><span class="n">២</span><span class="t">margin ទាំង ៤ ទិស</span></a></li>
+  <li><a href="#shorthand"><span class="n">៣</span><span class="t">សរសេរខ្លី (shorthand)</span></a></li>
+  <li><a href="#auto"><span class="n">៤</span><span class="t">margin: auto</span></a></li>
+  <li><a href="#negative"><span class="n">៥</span><span class="t">margin អវិជ្ជមាន</span></a></li>
+  <li><a href="#collapse"><span class="n">៦</span><span class="t">margin បញ្ចូលគ្នា</span></a></li>
+  <li><a href="#units"><span class="n">៧</span><span class="t">ឯកតាដែលប្រើបាន</span></a></li>
+  <li><a href="#playground"><span class="n">៨</span><span class="t">សាកល្បងផ្ទាល់</span></a></li>
+  <li><a href="#more"><span class="n">៩</span><span class="t">លក្ខណៈផ្សេងទៀត</span></a></li>
+  <li><a href="#practice"><span class="n">១០</span><span class="t">លំហាត់</span></a></li>
+</ol>
+
+<section id="intro">
+  <h2><span class="num">១</span> margin គឺអ្វី?</h2>
+  <p><code>margin</code> គឺជាគម្លាតទទេនៅ <strong>ខាងក្រៅ</strong> ជុំវិញ element មួយ។ វាច្រាន element ផ្សេងទៀតឱ្យនៅឆ្ងាយពី element នេះ។ margin គ្មានពណ៌ខ្លួនឯងទេ។ ក្នុងរូបខាងលើ យើងដាក់ពណ៌ទឹកក្រូចដើម្បីឱ្យមើលឃើញ។</p>
+  <p>ប្រអប់នីមួយៗនៅក្នុង HTML មាន ៤ ស្រទាប់ ពីក្នុងទៅក្រៅ៖</p>
+  <div class="tbl"><table>
+    <thead><tr><th>ស្រទាប់</th><th>អត្ថន័យ</th></tr></thead>
+    <tbody>
+      <tr><td><code>content</code></td><td>អត្ថបទ ឬរូបភាពនៅខាងក្នុង</td></tr>
+      <tr><td><code>padding</code></td><td>គម្លាតខាងក្នុង រវាង content និង border</td></tr>
+      <tr><td><code>border</code></td><td>ស៊ុមព័ទ្ធជុំវិញ</td></tr>
+      <tr><td><code>margin</code></td><td>គម្លាតខាងក្រៅ រវាង element នេះ និង element ផ្សេង</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p><strong>ចងចាំ៖</strong> <code>padding</code> នៅក្នុងស៊ុម ហើយមានពណ៌ផ្ទៃរបស់ element។ <code>margin</code> នៅក្រៅស៊ុម ហើយតែងតែថ្លា។</p></div>
+</section>
+
+<section id="four">
+  <h2><span class="num">២</span> margin ទាំង ៤ ទិស</h2>
+  <p>យើងអាចកំណត់ margin សម្រាប់ទិសនីមួយៗដោយឡែកពីគ្នា៖</p>
+  <div class="tbl"><table>
+    <thead><tr><th>លក្ខណៈ</th><th>ទិស</th><th>ឧទាហរណ៍</th></tr></thead>
+    <tbody>
+      <tr><td><code>margin-top</code></td><td>ខាងលើ</td><td><code>margin-top: 20px;</code></td></tr>
+      <tr><td><code>margin-right</code></td><td>ខាងស្តាំ</td><td><code>margin-right: 10px;</code></td></tr>
+      <tr><td><code>margin-bottom</code></td><td>ខាងក្រោម</td><td><code>margin-bottom: 20px;</code></td></tr>
+      <tr><td><code>margin-left</code></td><td>ខាងឆ្វេង</td><td><code>margin-left: 10px;</code></td></tr>
+      <tr><td><code>margin</code></td><td>ទាំង ៤ ទិសក្នុងមួយបន្ទាត់</td><td><code>margin: 20px;</code></td></tr>
+    </tbody>
+  </table></div>
+<pre class="code css"><code>.card {
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}</code></pre>
+  <div class="demo">
+    <p class="demo-label">ឧទាហរណ៍៖ box ពីរដែលមាន margin-bottom: 16px</p>
+    <div class="blk">box A</div>
+    <div class="blk" style="margin-top:16px">box B (margin-top: 16px)</div>
+  </div>
+</section>
+
+<section id="shorthand">
+  <h2><span class="num">៣</span> សរសេរខ្លី (shorthand)</h2>
+  <p>លក្ខណៈ <code>margin</code> មួយអាចទទួលតម្លៃ ១ ដល់ ៤។ ចំនួនតម្លៃកំណត់ថាទិសណាទទួលតម្លៃអ្វី៖</p>
+  <div class="tbl"><table>
+    <thead><tr><th>ការសរសេរ</th><th>អត្ថន័យ</th></tr></thead>
+    <tbody>
+      <tr><td><code>margin: 20px;</code></td><td>ទាំង ៤ ទិស ស្មើ 20px</td></tr>
+      <tr><td><code>margin: 10px 30px;</code></td><td>លើ និងក្រោម 10px, ឆ្វេង និងស្តាំ 30px</td></tr>
+      <tr><td><code>margin: 10px 20px 30px;</code></td><td>លើ 10px, ឆ្វេង និងស្តាំ 20px, ក្រោម 30px</td></tr>
+      <tr><td><code>margin: 10px 20px 30px 40px;</code></td><td>លើ 10px, ស្តាំ 20px, ក្រោម 30px, ឆ្វេង 40px</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p><strong>ល្បិចចងចាំ៖</strong> តម្លៃ ៤ ទៅតាមទិសទ្រនិចនាឡិកា ចាប់ពីខាងលើ៖ <strong>លើ → ស្តាំ → ក្រោម → ឆ្វេង</strong> (Top, Right, Bottom, Left)។</p></div>
+  <div class="demo">
+    <p class="demo-label">margin: 10px 20px 30px 40px</p>
+    <div class="stripes" style="display:inline-block;max-width:100%;vertical-align:top">
+      <div class="blk" style="margin:10px 20px 30px 40px;width:130px">box</div>
+    </div>
+    <div class="legend"><span><i style="background:var(--m-bg);border-color:var(--m-line)"></i>ផ្ទៃ margin</span><span><i style="background:var(--c-bg);border-color:var(--c-line)"></i>element</span></div>
+  </div>
+  <h3>margin-inline និង margin-block</h3>
+  <p>មានវិធីសរសេរខ្លីទៀតតាមទិសនៃអត្ថបទ៖ <code>margin-inline</code> ជំនួស ឆ្វេង និងស្តាំ ហើយ <code>margin-block</code> ជំនួស លើ និងក្រោម។</p>
+<pre class="code css"><code>.box {
+  margin-inline: auto;
+  margin-block: 24px;
+}</code></pre>
+</section>
+
+<section id="auto">
+  <h2><span class="num">៤</span> margin: auto</h2>
+  <p>តម្លៃ <code>auto</code> ឱ្យ browser ចែកទំហំទទេដែលនៅសល់ស្មើគ្នា។ ប្រសិនបើដាក់ <code>auto</code> ទាំងឆ្វេង និងស្តាំ element នឹងនៅចំកណ្តាល។ ត្រូវកំណត់ <code>width</code> (ឬ <code>max-width</code>) ហើយ element ត្រូវជា block។</p>
+<pre class="code css"><code>.container {
+  width: 200px;
+  margin: 0 auto;
+}</code></pre>
+  <div class="demo">
+    <p class="demo-label">ចំកណ្តាលដោយ margin: 0 auto</p>
+    <div class="center-parent"><div class="blk center-child">margin: 0 auto</div></div>
+  </div>
+  <h3>ច្រានទៅម្ខាងក្នុង flex</h3>
+  <p>ក្នុង <code>display: flex</code> ការដាក់ <code>margin-left: auto</code> លើ item មួយ នឹងច្រាន item នោះទៅខាងស្តាំបំផុត។ វិធីនេះប្រើញឹកញាប់ក្នុង navbar។</p>
+<pre class="code css"><code>.nav { display: flex; gap: 12px; }
+.login { margin-left: auto; }</code></pre>
+  <div class="demo">
+    <div class="nav">
+      <span class="blk">Logo</span><span class="blk">Home</span><span class="blk">About</span><span class="blk blk-m push">Login</span>
+    </div>
+  </div>
+  <div class="note"><p><strong>ចំណាំ៖</strong> ក្នុង block ធម្មតា <code>margin-top: auto</code> និង <code>margin-bottom: auto</code> ស្មើ 0 ហើយមិនធ្វើឱ្យនៅចំកណ្តាលបញ្ឈរទេ។ ក្នុង flex និង grid វាធ្វើបាន។</p></div>
+</section>
+
+<section id="negative">
+  <h2><span class="num">៥</span> margin អវិជ្ជមាន</h2>
+  <p>តម្លៃអវិជ្ជមាន (ដូចជា <code>-18px</code>) ទាញ element ឱ្យទៅរកទិសនោះ ហើយអាចត្រួតលើ element ផ្សេង។ ប្រើតែពេលចាំបាច់ ព្រោះពិបាកថែទាំ។</p>
+<pre class="code css"><code>.b {
+  margin-top: -18px;
+  margin-left: 38px;
+}</code></pre>
+  <div class="demo">
+    <div class="neg">
+      <div class="blk a">box A</div>
+      <div class="blk blk-m b">box B (margin-top: -18px)</div>
+    </div>
+  </div>
+</section>
+
+<section id="collapse">
+  <h2><span class="num">៦</span> margin បញ្ចូលគ្នា (collapse)</h2>
+  <p>ពេល <code>margin-bottom</code> របស់ element មួយជួប <code>margin-top</code> របស់ element បន្ទាប់ តាមបញ្ឈរ ពួកវា <strong>មិនបូកគ្នាទេ</strong>។ browser យកតម្លៃធំជាងគេ។ ឧទាហរណ៍ 40px និង 30px បានជាចន្លោះ 40px មិនមែន 70px។</p>
+  <div class="demo">
+    <p class="demo-label">កែតម្លៃដើម្បីមើល</p>
+    <div class="pg-controls">
+      <div class="ctl"><label for="cl-a">A: margin-bottom <output id="cl-a-o">40px</output></label><input id="cl-a" type="range" min="0" max="80" value="40"></div>
+      <div class="ctl"><label for="cl-b">B: margin-top <output id="cl-b-o">30px</output></label><input id="cl-b" type="range" min="0" max="80" value="30"></div>
+    </div>
+    <div class="cl-wrap stripes" id="cl-wrap">
+      <div class="blk cl-a" id="cl-a-el">box A</div>
+      <div class="blk cl-b" id="cl-b-el">box B</div>
+    </div>
+    <p class="result" id="cl-result">ចន្លោះពិត = 40px</p>
+  </div>
+  <ul class="plain">
+    <li>margin ខាងឆ្វេង និងស្តាំ មិនបញ្ចូលគ្នាទេ។ វាបូកគ្នាធម្មតា។</li>
+    <li>item ក្នុង <code>flex</code> និង <code>grid</code> មិនបញ្ចូល margin គ្នាទេ។</li>
+    <li>ប្រសិនបើចង់បានចន្លោះថេរ ប្រើ <code>gap</code> ជំនួស margin។</li>
+  </ul>
+</section>
+
+<section id="units">
+  <h2><span class="num">៧</span> ឯកតាដែលប្រើបាន</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>ឯកតា</th><th>អត្ថន័យ</th><th>ឧទាហរណ៍</th></tr></thead>
+    <tbody>
+      <tr><td><code>px</code></td><td>ទំហំថេរ</td><td><code>margin: 16px;</code></td></tr>
+      <tr><td><code>%</code></td><td>ភាគរយនៃទទឹងរបស់ parent (margin លើ និងក្រោមក៏គិតពីទទឹងដែរ)</td><td><code>margin-left: 5%;</code></td></tr>
+      <tr><td><code>em</code></td><td>គុណនឹងទំហំអក្សររបស់ element ខ្លួនឯង</td><td><code>margin-bottom: 1.5em;</code></td></tr>
+      <tr><td><code>rem</code></td><td>គុណនឹងទំហំអក្សររបស់ root (<code>html</code>)</td><td><code>margin: 2rem;</code></td></tr>
+      <tr><td><code>vw / vh</code></td><td>ភាគរយនៃទទឹង ឬកម្ពស់ viewport</td><td><code>margin-top: 10vh;</code></td></tr>
+      <tr><td><code>auto</code></td><td>ឱ្យ browser គណនា</td><td><code>margin: 0 auto;</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="playground">
+  <h2><span class="num">៨</span> សាកល្បងផ្ទាល់</h2>
+  <p>អូស slider ដើម្បីប្តូរ margin ទាំង ៤ ទិស។ ផ្ទៃឆ្នូតទឹកក្រូចគឺ margin ពិតរបស់ box។ កូដ CSS ខាងក្រោមប្តូរតាមភ្លាមៗ។</p>
+  <div class="demo">
+    <div class="pg-controls">
+      <div class="ctl"><label for="m-top">margin-top <output id="m-top-o">20px</output></label><input id="m-top" type="range" min="0" max="60" value="20"></div>
+      <div class="ctl"><label for="m-right">margin-right <output id="m-right-o">30px</output></label><input id="m-right" type="range" min="0" max="60" value="30"></div>
+      <div class="ctl"><label for="m-bottom">margin-bottom <output id="m-bottom-o">20px</output></label><input id="m-bottom" type="range" min="0" max="60" value="20"></div>
+      <div class="ctl"><label for="m-left">margin-left <output id="m-left-o">30px</output></label><input id="m-left" type="range" min="0" max="60" value="30"></div>
+    </div>
+    <div class="pg-stage"><div class="pg-ghost stripes" id="pg-ghost"><div class="pg-box" id="pg-box">box</div></div></div>
+    <div class="legend"><span><i style="background:var(--m-bg);border-color:var(--m-line)"></i>margin</span><span><i style="background:var(--c-bg);border-color:var(--c-line)"></i>element</span></div>
+    <pre class="code css"><code id="pg-code"></code></pre>
+    <div class="row-btns">
+      <button class="btn ghost" type="button" id="pg-reset">កំណត់ឡើងវិញ</button>
+      <button class="btn ghost" type="button" id="pg-equal">ធ្វើឱ្យស្មើគ្នាទាំង ៤</button>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2><span class="num">៩</span> លក្ខណៈផ្សេងទៀតដែលប្រើជាមួយ margin</h2>
+  <p>margin ធ្វើការល្អបំផុតពេលប្រើជាមួយលក្ខណៈទាំងនេះ៖</p>
+  <div class="tbl"><table>
+    <thead><tr><th>លក្ខណៈ</th><th>មុខងារ</th><th>ឧទាហរណ៍</th></tr></thead>
+    <tbody>
+      <tr><td><code>padding</code></td><td>គម្លាតខាងក្នុង element</td><td><code>padding: 16px 24px;</code></td></tr>
+      <tr><td><code>border</code></td><td>ស៊ុមជុំវិញ element</td><td><code>border: 2px solid #333;</code></td></tr>
+      <tr><td><code>width / max-width</code></td><td>ទទឹង និងទទឹងអតិបរមា (ចាំបាច់សម្រាប់ margin: auto)</td><td><code>max-width: 600px;</code></td></tr>
+      <tr><td><code>height / min-height</code></td><td>កម្ពស់ និងកម្ពស់អប្បបរមា</td><td><code>min-height: 200px;</code></td></tr>
+      <tr><td><code>display</code></td><td>ប្រភេទ element៖ block, inline-block, flex, grid</td><td><code>display: inline-block;</code></td></tr>
+      <tr><td><code>box-sizing</code></td><td>ឱ្យ width រាប់បញ្ចូល padding និង border</td><td><code>box-sizing: border-box;</code></td></tr>
+      <tr><td><code>gap</code></td><td>គម្លាតរវាង item ក្នុង flex ឬ grid</td><td><code>gap: 16px;</code></td></tr>
+      <tr><td><code>margin-inline / margin-block</code></td><td>margin តាមទិសអត្ថបទ</td><td><code>margin-inline: auto;</code></td></tr>
+      <tr><td><code>outline</code></td><td>ស៊ុមដែលមិនយកទំហំ និងមិនប៉ះ layout</td><td><code>outline: 2px dashed red;</code></td></tr>
+    </tbody>
+  </table></div>
+  <h3>ឧទាហរណ៍ card ពិតប្រាកដ</h3>
+<pre class="code css"><code>* { box-sizing: border-box; }
+
+.card {
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #17231e;
+  border-radius: 12px;
+}
+.card h4 { margin: 0 0 8px; }
+.card p  { margin: 0 0 16px; }</code></pre>
+  <div class="demo">
+    <div class="demo-card">
+      <h4>ចំណងជើង card</h4>
+      <p>padding ដាក់គម្លាតក្នុង card ហើយ margin ដាក់គម្លាតរវាង h4, p និងប៊ូតុង។</p>
+      <button class="btn" type="button">ប៊ូតុង</button>
+    </div>
+  </div>
+  <h3>ករណី margin មិនដំណើរការ</h3>
+  <p>element ប្រភេទ <code>inline</code> ដូចជា <code>&lt;span&gt;</code> និង <code>&lt;a&gt;</code> មិនទទួល <code>margin-top</code> និង <code>margin-bottom</code> ទេ។ ដើម្បីដោះស្រាយ ដាក់ <code>display: inline-block</code> ឬ <code>display: block</code>។</p>
+<pre class="code css"><code>span.tag {
+  display: inline-block;
+  margin-top: 12px;
+}</code></pre>
+</section>
+
+<section id="practice">
+  <h2><span class="num">១០</span> លំហាត់</h2>
+  <p>ព្យាយាមឆ្លើយមុន ហើយចុចដើម្បីមើលចម្លើយ។</p>
+  <details>
+    <summary>១. <span class="mono">margin: 5px 10px 15px 20px;</span> តើ margin-left ស្មើប៉ុន្មាន?</summary>
+    <div class="ans"><p>20px។ តម្លៃទី ៤ ជាខាងឆ្វេង (លើ → ស្តាំ → ក្រោម → ឆ្វេង)។</p></div>
+  </details>
+  <details>
+    <summary>២. ចង់ដាក់ div ទទឹង 300px នៅចំកណ្តាល parent តើសរសេរយ៉ាងដូចម្តេច?</summary>
+    <div class="ans"><pre class="code css"><code>div {
+  width: 300px;
+  margin: 0 auto;
+}</code></pre></div>
+  </details>
+  <details>
+    <summary>៣. box A មាន margin-bottom: 25px ហើយ box B មាន margin-top: 15px។ តើចន្លោះពិតប៉ុន្មាន?</summary>
+    <div class="ans"><p>25px។ margin បញ្ចូលគ្នា ហើយយកតម្លៃធំជាង។</p></div>
+  </details>
+  <details>
+    <summary>៤. ហេតុអ្វី margin-top លើ &lt;span&gt; មិនដំណើរការ?</summary>
+    <div class="ans"><p>ព្រោះ span ជា inline element។ ដាក់ <code>display: inline-block</code> ដើម្បីឱ្យ margin បញ្ឈរដំណើរការ។</p></div>
+  </details>
+  <details>
+    <summary>៥. តើ margin ខុសពី padding យ៉ាងដូចម្តេច?</summary>
+    <div class="ans"><p>margin នៅខាងក្រៅ border ហើយថ្លា។ padding នៅខាងក្នុង border ហើយមានពណ៌ផ្ទៃរបស់ element។</p></div>
+  </details>
+
+  <h3>សង្ខេប</h3>
+  <ul class="plain sum">
+    <li><code>margin</code> គឺគម្លាតខាងក្រៅ ហើយមាន ៤ ទិស៖ top, right, bottom, left។</li>
+    <li>សរសេរខ្លីតាមទិសទ្រនិចនាឡិកា៖ លើ → ស្តាំ → ក្រោម → ឆ្វេង។</li>
+    <li><code>margin: 0 auto</code> ធ្វើឱ្យ block ដែលមាន width នៅចំកណ្តាល។</li>
+    <li>margin បញ្ឈរបញ្ចូលគ្នា (យកតម្លៃធំជាង) ហើយ margin ផ្តេកបូកគ្នា។</li>
+    <li>ប្រើ <code>padding</code>, <code>gap</code> និង <code>box-sizing</code> ជាមួយ margin ដើម្បីរៀបចំ layout ឱ្យស្អាត។</li>
+  </ul>
+</section>
+
+<footer>មេរៀន CSS Margin · ឧទាហរណ៍ទាំងអស់ប្រើ CSS ពិត អាចចម្លងទៅប្រើបាន។</footer>
+</div>
+
+<script>
+(function () {
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function highlight(el) {
+    var text = el.textContent;
+    el.innerHTML = text.split('\n').map(function (line) {
+      var m;
+      if (/^\s*\/\*.*\*\/\s*$/.test(line)) return '<span class="k-com">' + esc(line) + '</span>';
+      if ((m = line.match(/^(\s*)([a-z-]+)(\s*:\s*)([^;{}]*)(;?)(.*)$/)) && line.indexOf('{') === -1) {
+        return esc(m[1]) + '<span class="k-prop">' + esc(m[2]) + '</span>' + esc(m[3]) + '<span class="k-val">' + esc(m[4]) + '</span>' + esc(m[5] + m[6]);
+      }
+      if (/\{/.test(line)) {
+        return esc(line).replace(/^([^{]*?)(\s*\{)(.*)$/, function (_, sel, brace, rest) {
+          var inner = rest.replace(/([a-z-]+)(:\s*)([^;}]*)(;?)/g, function (_, p, c, v, s) {
+            return '<span class="k-prop">' + p + '</span>' + c + '<span class="k-val">' + v + '</span>' + s;
+          });
+          return '<span class="k-sel">' + sel + '</span>' + brace + inner;
+        });
+      }
+      return esc(line);
+    }).join('\n');
+  }
+
+  function addCopy(pre) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy';
+    btn.textContent = 'ចម្លង';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code.textContent;
+      function done() { btn.textContent = 'បានចម្លង'; setTimeout(function () { btn.textContent = 'ចម្លង'; }, 1600); }
+      function fallback() {
+        try {
+          var r = document.createRange(); r.selectNodeContents(code);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        } catch (e) {}
+      }
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+    pre.appendChild(btn);
+  }
+
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    highlight(pre.querySelector('code'));
+    addCopy(pre);
+  });
+
+  /* playground */
+  var ids = ['top', 'right', 'bottom', 'left'];
+  var defaults = { top: 20, right: 30, bottom: 20, left: 30 };
+  var box = document.getElementById('pg-box');
+  var codeEl = document.getElementById('pg-code');
+
+  function val(d) { return parseInt(document.getElementById('m-' + d).value, 10); }
+
+  function updatePg() {
+    var v = {};
+    ids.forEach(function (d) {
+      v[d] = val(d);
+      document.getElementById('m-' + d + '-o').textContent = v[d] + 'px';
+    });
+    box.style.margin = v.top + 'px ' + v.right + 'px ' + v.bottom + 'px ' + v.left + 'px';
+    var short;
+    if (v.top === v.right && v.right === v.bottom && v.bottom === v.left) short = v.top + 'px';
+    else if (v.top === v.bottom && v.left === v.right) short = v.top + 'px ' + v.right + 'px';
+    else short = v.top + 'px ' + v.right + 'px ' + v.bottom + 'px ' + v.left + 'px';
+    codeEl.textContent =
+      '.box {\n' +
+      '  margin-top: ' + v.top + 'px;\n' +
+      '  margin-right: ' + v.right + 'px;\n' +
+      '  margin-bottom: ' + v.bottom + 'px;\n' +
+      '  margin-left: ' + v.left + 'px;\n' +
+      '}\n\n' +
+      '/* សរសេរខ្លី */\n' +
+      '.box { margin: ' + short + '; }';
+    highlight(codeEl);
+  }
+  ids.forEach(function (d) { document.getElementById('m-' + d).addEventListener('input', updatePg); });
+  document.getElementById('pg-reset').addEventListener('click', function () {
+    ids.forEach(function (d) { document.getElementById('m-' + d).value = defaults[d]; });
+    updatePg();
+  });
+  document.getElementById('pg-equal').addEventListener('click', function () {
+    var t = val('top');
+    ids.forEach(function (d) { document.getElementById('m-' + d).value = t; });
+    updatePg();
+  });
+  updatePg();
+
+  /* collapse demo */
+  var ca = document.getElementById('cl-a'), cb = document.getElementById('cl-b');
+  function updateCl() {
+    var a = parseInt(ca.value, 10), b = parseInt(cb.value, 10);
+    document.getElementById('cl-a-o').textContent = a + 'px';
+    document.getElementById('cl-b-o').textContent = b + 'px';
+    document.getElementById('cl-a-el').style.marginBottom = a + 'px';
+    document.getElementById('cl-b-el').style.marginTop = b + 'px';
+    document.getElementById('cl-result').textContent =
+      'ចន្លោះពិត = ' + Math.max(a, b) + 'px (មិនមែន ' + (a + b) + 'px)';
+  }
+  ca.addEventListener('input', updateCl);
+  cb.addEventListener('input', updateCl);
+  updateCl();
+})();
+</script>
+
+</body></html>
