@@ -1,0 +1,655 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>មេរៀន CSS Border</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;700&family=Moul&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; hero pairs the title with a live four-sided box; each section is a short lesson with a live demo beside its code. */
+:root {
+  --bg: #eef1f6;
+  --surface: #fbfcfe;
+  --fg: #1a2233;
+  --muted: #566176;
+  --line: #cdd5e2;
+  --accent: #2b59e0;
+  --accent-ink: #ffffff;
+  --warm: #c9500c;
+  --code-bg: #e3e8f1;
+  --good: #17784a;
+  --demo: #2b59e0;
+  --side-t: #2b59e0;
+  --side-r: #e07b12;
+  --side-b: #1f9a5b;
+  --side-l: #8a47d6;
+  --font-display: "Moul", "Noto Sans Khmer", serif;
+  --font-body: "Kantumruy Pro", "Noto Sans Khmer", system-ui, sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1420;
+    --surface: #171d2c;
+    --fg: #e8ecf5;
+    --muted: #9aa5ba;
+    --line: #2d3649;
+    --accent: #8aa8ff;
+    --accent-ink: #0f1420;
+    --warm: #ff9a5c;
+    --code-bg: #1f2739;
+    --good: #5fd39a;
+    --demo: #7c9bff;
+    --side-t: #7c9bff;
+    --side-r: #ffa64d;
+    --side-b: #4fd196;
+    --side-l: #b88cf5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1420;
+  --surface: #171d2c;
+  --fg: #e8ecf5;
+  --muted: #9aa5ba;
+  --line: #2d3649;
+  --accent: #8aa8ff;
+  --accent-ink: #0f1420;
+  --warm: #ff9a5c;
+  --code-bg: #1f2739;
+  --good: #5fd39a;
+  --demo: #7c9bff;
+  --side-t: #7c9bff;
+  --side-r: #ffa64d;
+  --side-b: #4fd196;
+  --side-l: #b88cf5;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.85;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3, p { margin: 0; }
+h2 { font-size: 1.55rem; line-height: 1.5; text-wrap: balance; }
+h3 { font-size: 1.05rem; line-height: 1.5; }
+p + p { margin-top: 10px; }
+.muted { color: var(--muted); }
+code, pre, .mono { font-family: var(--font-code); font-size: 0.88rem; line-height: 1.7; }
+code { background: var(--code-bg); padding: 1px 7px; border-radius: 5px; }
+pre {
+  margin: 0; background: var(--code-bg); padding: 14px 16px; border-radius: 8px;
+  overflow-x: auto; white-space: pre; tab-size: 2;
+}
+.eyebrow { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warm); font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.7rem, 5.4vw, 2.6rem); line-height: 1.6; text-wrap: balance; margin-top: 6px; }
+.hero p.lead { margin-top: 14px; color: var(--muted); max-width: 34em; }
+.hero-box {
+  justify-self: center; width: min(100%, 280px); aspect-ratio: 5 / 4; background: var(--surface);
+  display: grid; place-items: center; color: var(--muted);
+  border-top: 10px solid var(--side-t); border-right: 10px dashed var(--side-r);
+  border-bottom: 10px dotted var(--side-b); border-left: 10px double var(--side-l);
+}
+.outline-map { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 22px; }
+.map-btn {
+  text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 14px; display: flex; align-items: baseline; gap: 10px; min-width: 0;
+}
+.map-btn:hover { border-color: var(--accent); }
+.map-btn b { font-size: 1.9rem; line-height: 1.2; color: var(--accent); font-weight: 700; }
+.map-btn span { font-size: 0.95rem; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip { background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 2px 14px; font-size: 0.9rem; color: var(--muted); }
+.chip:hover { color: var(--fg); border-color: var(--fg); }
+
+/* sections */
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 4px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.stack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.note { border-left: 4px solid var(--warm); padding: 6px 0 6px 14px; color: var(--fg); }
+.note b { color: var(--warm); }
+
+/* box model */
+.bm { display: flex; justify-content: center; }
+.bm .m, .bm .b, .bm .p, .bm .c { display: grid; place-items: center; text-align: center; }
+.bm .m { background: color-mix(in srgb, var(--warm) 14%, transparent); border: 1px dashed var(--warm); padding: 22px; width: min(100%, 330px); position: relative; }
+.bm .b { background: var(--surface); border: 12px solid var(--demo); padding: 22px; width: 100%; position: relative; }
+.bm .p { background: color-mix(in srgb, var(--good) 16%, transparent); padding: 22px; width: 100%; position: relative; }
+.bm .c { background: var(--code-bg); padding: 16px 10px; width: 100%; font-size: 0.9rem; }
+.bm .tag { position: absolute; top: 2px; left: 6px; font-size: 0.72rem; line-height: 1.4; font-family: var(--font-code); color: var(--muted); }
+.bm .b .tag { top: -12px; left: -8px; background: var(--demo); color: var(--accent-ink); padding: 0 6px; border-radius: 3px; }
+
+/* four sides */
+.sidebox {
+  width: min(100%, 260px); height: 150px; margin: 0 auto; background: var(--surface); display: grid; place-items: center;
+  border-style: solid; border-width: 10px; border-color: var(--side-t) var(--side-r) var(--side-b) var(--side-l);
+  color: var(--muted); transition: border-width 0.15s;
+}
+.toggles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.tog { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; text-align: left; }
+.tog i { width: 14px; height: 14px; border-radius: 3px; flex: none; background: var(--c); }
+.tog[aria-pressed="true"] { border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); }
+.tog[aria-pressed="false"] { opacity: 0.55; }
+.tog small { color: var(--muted); font-family: var(--font-code); font-size: 0.75rem; }
+
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 440px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.8rem; letter-spacing: 0.04em; color: var(--muted); font-weight: 500; }
+
+/* properties */
+.props { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.prop { display: flex; flex-direction: column; gap: 10px; }
+.prop .demo-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.mini { width: 54px; height: 38px; background: var(--code-bg); }
+.short { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.part { display: flex; flex-direction: column; gap: 4px; }
+.part .tok { font-family: var(--font-code); font-size: 1.1rem; padding: 4px 14px; border-radius: 8px; border: 2px solid var(--c); }
+.part .lbl { font-size: 0.85rem; color: var(--c); font-weight: 700; }
+.part.w { --c: var(--side-r); } .part.s { --c: var(--side-b); } .part.c { --c: var(--side-t); }
+.kw { display: flex; align-items: center; font-family: var(--font-code); padding-top: 6px; }
+
+/* ten styles */
+.styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
+.style-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.style-card .stage { background: var(--code-bg); border-radius: 6px; height: 92px; display: grid; place-items: center; }
+.style-card .sample { width: 70%; height: 62%; background: var(--surface); border: 8px var(--st) var(--demo); }
+.style-card h3 { font-family: var(--font-code); font-size: 1rem; }
+.style-card p { font-size: 0.88rem; line-height: 1.7; color: var(--muted); }
+
+/* extras */
+.extras { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.extra { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.extra .stage { background: var(--code-bg); border-radius: 8px; min-height: 120px; display: grid; place-items: center; padding: 16px; }
+.ex-a { width: 110px; height: 70px; background: var(--surface); border: 4px solid var(--demo); border-radius: 16px; }
+.ex-b { width: 84px; height: 84px; background: var(--surface); border: 4px solid var(--demo); border-radius: 50%; }
+.ex-c { padding: 0 4px 2px; border-bottom: 3px solid var(--side-r); font-weight: 700; font-size: 1.2rem; }
+.ex-d { width: 110px; height: 60px; background: var(--surface); border: 2px solid var(--muted); outline: 3px dashed var(--side-l); outline-offset: 5px; }
+.ex-e { width: 110px; height: 70px; background: var(--surface); border: 6px solid; border-image: linear-gradient(135deg, var(--side-t), var(--side-r)) 1; }
+.ex-f { width: 110px; height: 70px; background: var(--surface); border: solid var(--demo); border-width: 2px 10px 2px 10px; }
+
+/* playground */
+.play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 22px; }
+.controls { display: flex; flex-direction: column; gap: 14px; }
+.ctl { display: flex; flex-direction: column; gap: 4px; }
+.ctl label, .ctl legend { font-size: 0.9rem; display: flex; justify-content: space-between; gap: 8px; padding: 0; }
+.ctl label output { font-family: var(--font-code); color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+select, input[type="color"] { font: inherit; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; width: 100%; }
+input[type="color"] { padding: 2px; height: 40px; }
+fieldset { border: 0; margin: 0; padding: 0; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.checks label { justify-content: flex-start; align-items: center; gap: 6px; }
+.preview-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.preview { background: var(--code-bg); border-radius: 10px; min-height: 210px; display: grid; place-items: center; padding: 20px; }
+.preview .pv { width: min(100%, 240px); height: 130px; background: var(--surface); display: grid; place-items: center; color: var(--muted); }
+.copy-row { display: flex; justify-content: flex-end; }
+.btn { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px; padding: 6px 16px; font-weight: 700; }
+.btn:hover { filter: brightness(1.08); }
+
+/* exercises */
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+details + details { margin-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+details[open] summary { margin-bottom: 10px; }
+.ans { display: flex; flex-direction: column; gap: 8px; }
+.ans b { color: var(--good); }
+
+@media (max-width: 720px) {
+  .hero, .split, .play { grid-template-columns: minmax(0, 1fr); }
+  h2 { font-size: 1.35rem; }
+}
+@media (prefers-reduced-motion: reduce) { .sidebox { transition: none; } }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">CSS · មូលដ្ឋាន</div>
+      <h1>មេរៀន CSS Border</h1>
+      <p class="lead">Border គឺជាស៊ុមជុំវិញធាតុ HTML។ មេរៀននេះបង្ហាញពីចំនួនជ្រុង លក្ខណៈសម្បត្តិ និងរចនាប័ទ្ម រួមទាំងធាតុបន្ថែម កន្លែងសាកល្បង និងលំហាត់។</p>
+      <div class="outline-map" role="navigation" aria-label="មាតិកា">
+        <button class="map-btn" data-t="sides"><b>៤</b><span>ជ្រុង<br><small class="muted mono">sides</small></span></button>
+        <button class="map-btn" data-t="props"><b>៣</b><span>Properties<br><small class="muted mono">width · style · color</small></span></button>
+        <button class="map-btn" data-t="styles"><b>១០</b><span>Styles<br><small class="muted mono">solid, dashed…</small></span></button>
+      </div>
+      <div class="jump">
+        <button class="chip" data-t="more">ធាតុបន្ថែម</button>
+        <button class="chip" data-t="play">កន្លែងសាកល្បង</button>
+        <button class="chip" data-t="quiz">លំហាត់</button>
+        <button class="chip" data-t="recap">សង្ខេប</button>
+      </div>
+    </div>
+    <div class="hero-box mono" aria-hidden="true">border</div>
+  </header>
+
+  <section id="what">
+    <div class="sec-head">
+      <div class="eyebrow">ផ្នែកទី ១</div>
+      <h2>Border ស្ថិតនៅកន្លែងណាក្នុង Box Model?</h2>
+    </div>
+    <div class="split">
+      <div class="stack">
+        <p>ធាតុ HTML ទាំងអស់ជាប្រអប់។ ពីក្នុងចេញក្រៅ ប្រអប់មាន៖ <b>content</b> (មាតិកា) → <b>padding</b> (គម្លាតខាងក្នុង) → <b>border</b> (ស៊ុម) → <b>margin</b> (គម្លាតខាងក្រៅ)។</p>
+        <p>Border ជាបន្ទាត់ដែលបែងចែកខាងក្នុងធាតុ ពីគម្លាតខាងក្រៅ។ វាមានកម្រាស់ ដូច្នេះវាបន្ថែមទំហំដល់ធាតុ។</p>
+        <pre>.card {
+  border: 2px solid #2b59e0;
+}</pre>
+      </div>
+      <div class="bm" role="img" aria-label="ដ្យាក្រាម Box Model៖ margin, border, padding, content">
+        <div class="m"><span class="tag">margin</span>
+          <div class="b"><span class="tag">border</span>
+            <div class="p"><span class="tag">padding</span>
+              <div class="c">content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sides">
+    <div class="sec-head">
+      <div class="eyebrow">ផ្នែកទី ២</div>
+      <h2>Border មានប៉ុន្មានជ្រុង? មាន ៤ ជ្រុង</h2>
+    </div>
+    <p>ប្រអប់ មួយមាន ៤ ជ្រុង ហើយជ្រុងនីមួយៗអាចកំណត់ដោយឡែក។ ចុចប៊ូតុងខាងក្រោម ដើម្បីបើក ឬបិទជ្រុងនីមួយៗ។</p>
+    <div class="panel split">
+      <div class="stack">
+        <div class="sidebox" id="sidebox"><span class="mono">element</span></div>
+        <div class="toggles" id="toggles">
+          <button class="tog" data-side="top" aria-pressed="true" style="--c: var(--side-t)"><i></i><span>ខាងលើ<br><small>border-top</small></span></button>
+          <button class="tog" data-side="right" aria-pressed="true" style="--c: var(--side-r)"><i></i><span>ខាងស្ដាំ<br><small>border-right</small></span></button>
+          <button class="tog" data-side="bottom" aria-pressed="true" style="--c: var(--side-b)"><i></i><span>ខាងក្រោម<br><small>border-bottom</small></span></button>
+          <button class="tog" data-side="left" aria-pressed="true" style="--c: var(--side-l)"><i></i><span>ខាងឆ្វេង<br><small>border-left</small></span></button>
+        </div>
+      </div>
+      <div class="stack">
+        <h3>កូដដែលទទួលបាន</h3>
+        <pre id="sidecode"></pre>
+        <p class="muted" style="font-size:0.92rem">ជ្រុងដែលបិទ ត្រូវបានលុបចេញពីកូដ។ ជ្រុងដែលមិនសរសេរ នឹងគ្មានស៊ុម។</p>
+      </div>
+    </div>
+
+    <h3>សរសេរ ៤ ជ្រុងក្នុងមួយបន្ទាត់</h3>
+    <p>ពេលប្រើ <code>border-width</code>, <code>border-color</code> ឬ <code>border-style</code> ជាមួយតម្លៃច្រើន ពួកវាតាមលំដាប់ទ្រនិចនាឡិកា៖ <b>លើ → ស្ដាំ → ក្រោម → ឆ្វេង</b> (top, right, bottom, left)។</p>
+    <div class="panel">
+      <div class="tbl">
+        <table>
+          <thead><tr><th>ចំនួនតម្លៃ</th><th>ឧទាហរណ៍</th><th>ន័យ</th></tr></thead>
+          <tbody>
+            <tr><td>១ តម្លៃ</td><td class="mono">border-width: 4px;</td><td>ទាំង ៤ ជ្រុងស្មើគ្នា</td></tr>
+            <tr><td>២ តម្លៃ</td><td class="mono">border-width: 2px 8px;</td><td>លើ-ក្រោម = 2px, ស្ដាំ-ឆ្វេង = 8px</td></tr>
+            <tr><td>៣ តម្លៃ</td><td class="mono">border-width: 2px 8px 4px;</td><td>លើ = 2px, ស្ដាំ-ឆ្វេង = 8px, ក្រោម = 4px</td></tr>
+            <tr><td>៤ តម្លៃ</td><td class="mono">border-width: 1px 2px 3px 4px;</td><td>លើ 1px, ស្ដាំ 2px, ក្រោម 3px, ឆ្វេង 4px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="props">
+    <div class="sec-head">
+      <div class="eyebrow">ផ្នែកទី ៣</div>
+      <h2>Border មាន ៣ Properties សំខាន់</h2>
+    </div>
+    <p>ដើម្បីបង្កើតស៊ុម អ្នកត្រូវប្រាប់ browser ៣ យ៉ាង៖ កម្រាស់ រចនាប័ទ្ម និងពណ៌។</p>
+    <div class="props">
+      <div class="panel prop">
+        <h3 class="mono" style="color:var(--side-r)">border-width</h3>
+        <p>កម្រាស់នៃស៊ុម។</p>
+        <div class="demo-row">
+          <div class="mini" style="border: 1px solid var(--demo)"></div>
+          <div class="mini" style="border: 4px solid var(--demo)"></div>
+          <div class="mini" style="border: 8px solid var(--demo)"></div>
+        </div>
+        <pre>border-width: 1px;
+border-width: 4px;
+border-width: thick;</pre>
+        <p class="muted" style="font-size:0.9rem">តម្លៃ៖ ខ្នាត (px, em, rem) ឬពាក្យ <code>thin</code> <code>medium</code> <code>thick</code>។</p>
+      </div>
+      <div class="panel prop">
+        <h3 class="mono" style="color:var(--side-b)">border-style</h3>
+        <p>រចនាប័ទ្មនៃបន្ទាត់ (ក្នុងមេរៀននេះមាន ១០ យ៉ាង)។</p>
+        <div class="demo-row">
+          <div class="mini" style="border: 4px solid var(--demo)"></div>
+          <div class="mini" style="border: 4px dashed var(--demo)"></div>
+          <div class="mini" style="border: 4px dotted var(--demo)"></div>
+        </div>
+        <pre>border-style: solid;
+border-style: dashed;
+border-style: dotted;</pre>
+        <p class="muted" style="font-size:0.9rem">ត្រូវតែមាន! បើគ្មាន style នោះតម្លៃលំនាំដើមគឺ <code>none</code> ហើយស៊ុមមិនបង្ហាញ។</p>
+      </div>
+      <div class="panel prop">
+        <h3 class="mono" style="color:var(--side-t)">border-color</h3>
+        <p>ពណ៌នៃស៊ុម។</p>
+        <div class="demo-row">
+          <div class="mini" style="border: 4px solid var(--side-t)"></div>
+          <div class="mini" style="border: 4px solid var(--side-r)"></div>
+          <div class="mini" style="border: 4px solid var(--side-b)"></div>
+        </div>
+        <pre>border-color: red;
+border-color: #2b59e0;
+border-color: rgb(43 89 224);</pre>
+        <p class="muted" style="font-size:0.9rem">ប្រើឈ្មោះពណ៌ hex, rgb ឬ hsl។ បើមិនសរសេរ ពណ៌ដូចអក្សរ (<code>currentColor</code>)។</p>
+      </div>
+    </div>
+
+    <h3>Shorthand៖ សរសេរ ៣ យ៉ាងក្នុងមួយបន្ទាត់</h3>
+    <div class="panel stack">
+      <div class="short">
+        <div class="kw">border:</div>
+        <div class="part w"><span class="tok">3px</span><span class="lbl">width</span></div>
+        <div class="part s"><span class="tok">solid</span><span class="lbl">style</span></div>
+        <div class="part c"><span class="tok">#2b59e0</span><span class="lbl">color</span></div>
+        <div class="kw">;</div>
+      </div>
+      <p>លំដាប់ធម្មតាគឺ <b>width → style → color</b> ប៉ុន្តែ browser ទទួលយកលំដាប់ផ្សេងបាន។ ត្រូវតែមាន <code>style</code> យ៉ាងតិច។</p>
+      <div class="note"><b>ចំណាំ៖</b> <code>border: 5px red;</code> មិនបង្ហាញស៊ុម ព្រោះគ្មាន style។ សរសេរ <code>border: 5px solid red;</code> វិញ។</div>
+    </div>
+  </section>
+
+  <section id="styles">
+    <div class="sec-head">
+      <div class="eyebrow">ផ្នែកទី ៤</div>
+      <h2>Border Style ដែលប្រើញឹកញាប់ ១០ យ៉ាង</h2>
+    </div>
+    <p>គ្រប់ប្រអប់ខាងក្រោមប្រើ <code>border: 8px … </code> ដូចគ្នា ខុសតែ style។ ក្នុង <code>groove</code> <code>ridge</code> <code>inset</code> <code>outset</code> ត្រូវប្រើកម្រាស់ធំបន្តិច ទើបឃើញឥទ្ធិពល ៣ ខ្នាត។</p>
+    <div class="styles" id="stylegrid"></div>
+    <div class="note"><b>ចំណាំ៖</b> <code>double</code> ត្រូវការកម្រាស់យ៉ាងតិច 3px ទើបឃើញបន្ទាត់ពីរ។ <code>none</code> និង <code>hidden</code> ទាំងពីរមិនបង្ហាញស៊ុម ប៉ុន្តែ <code>hidden</code> ដោះស្រាយជម្លោះក្នុងតារាង (table)។</div>
+  </section>
+
+  <section id="more">
+    <div class="sec-head">
+      <div class="eyebrow">ផ្នែកទី ៥</div>
+      <h2>ធាតុបន្ថែមដែលអាចប្រើជាមួយ Border</h2>
+    </div>
+    <div class="extras">
+      <div class="panel extra">
+        <div class="stage"><div class="ex-a"></div></div>
+        <h3 class="mono">border-radius</h3>
+        <p>កាត់ជ្រុងឲ្យមូល។</p>
+        <pre>border: 4px solid #2b59e0;
+border-radius: 16px;</pre>
+      </div>
+      <div class="panel extra">
+        <div class="stage"><div class="ex-b"></div></div>
+        <h3>ធ្វើជារង្វង់</h3>
+        <p>ប្រអប់ការ៉េ និង <code>50%</code> ក្លាយជារង្វង់។</p>
+        <pre>width: 84px; height: 84px;
+border-radius: 50%;</pre>
+      </div>
+      <div class="panel extra">
+        <div class="stage"><span class="ex-c">ចំណងជើង</span></div>
+        <h3>ជ្រុងតែមួយ</h3>
+        <p>ប្រើជាបន្ទាត់ក្រោមចំណងជើង។</p>
+        <pre>border-bottom: 3px solid orange;</pre>
+      </div>
+      <div class="panel extra">
+        <div class="stage"><div class="ex-f"></div></div>
+        <h3>កម្រាស់ខុសគ្នា</h3>
+        <p>លើ-ក្រោម 2px, ស្ដាំ-ឆ្វេង 10px។</p>
+        <pre>border: solid #2b59e0;
+border-width: 2px 10px;</pre>
+      </div>
+      <div class="panel extra">
+        <div class="stage"><div class="ex-d"></div></div>
+        <h3 class="mono">outline</h3>
+        <p>ស្រដៀង border ប៉ុន្តែនៅក្រៅប្រអប់ ហើយមិនប៉ះពាល់ទំហំ។ ប្រើ <code>outline-offset</code> ដើម្បីដកឃ្លា។</p>
+        <pre>outline: 3px dashed purple;
+outline-offset: 5px;</pre>
+      </div>
+      <div class="panel extra">
+        <div class="stage"><div class="ex-e"></div></div>
+        <h3 class="mono">border-image</h3>
+        <p>ប្រើជម្រាលពណ៌ (gradient) ជាស៊ុម។</p>
+        <pre>border: 6px solid;
+border-image: linear-gradient(
+  135deg, blue, orange) 1;</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="play">
+    <div class="sec-head">
+      <div class="eyebrow">សាកល្បង</div>
+      <h2>កន្លែងសាកល្បង Border</h2>
+    </div>
+    <p>ប្តូរតម្លៃ ហើយមើលស៊ុមផ្លាស់ប្ដូរភ្លាមៗ។ កូដខាងស្ដាំអាចចម្លងទៅប្រើបាន។</p>
+    <div class="panel play">
+      <div class="controls">
+        <div class="ctl">
+          <label for="pw">កម្រាស់ <output id="pwo">6px</output></label>
+          <input type="range" id="pw" min="0" max="24" value="6">
+        </div>
+        <div class="ctl">
+          <label for="ps">រចនាប័ទ្ម (style)</label>
+          <select id="ps">
+            <option>solid</option><option>dashed</option><option>dotted</option><option>double</option>
+            <option>groove</option><option>ridge</option><option>inset</option><option>outset</option>
+            <option>none</option><option>hidden</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <label for="pc">ពណ៌</label>
+          <input type="color" id="pc" value="#2b59e0">
+        </div>
+        <div class="ctl">
+          <label for="pr">កាត់ជ្រុងមូល <output id="pro">12px</output></label>
+          <input type="range" id="pr" min="0" max="80" value="12">
+        </div>
+        <fieldset class="ctl">
+          <legend>ជ្រុងដែលមានស៊ុម</legend>
+          <div class="checks">
+            <label for="ct"><input type="checkbox" id="ct" checked> ខាងលើ</label>
+            <label for="cr"><input type="checkbox" id="cr" checked> ខាងស្ដាំ</label>
+            <label for="cb"><input type="checkbox" id="cb" checked> ខាងក្រោម</label>
+            <label for="cl"><input type="checkbox" id="cl" checked> ខាងឆ្វេង</label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="preview-col">
+        <div class="preview"><div class="pv mono" id="pv">preview</div></div>
+        <pre id="pout"></pre>
+        <div class="copy-row"><button class="btn" id="pcopy" type="button">ចម្លងកូដ</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="sec-head">
+      <div class="eyebrow">លំហាត់</div>
+      <h2>សាកល្បងខ្លួនឯង</h2>
+    </div>
+    <p>ព្យាយាមឆ្លើយក្នុងចិត្តសិន រួចចុចដើម្បីមើលចម្លើយ។</p>
+    <div>
+      <details>
+        <summary>១. សរសេរ CSS ដើម្បីបង្កើតស៊ុមពណ៌ក្រហម កម្រាស់ 3px ជាបន្ទាត់ដាច់ៗ។</summary>
+        <div class="ans"><pre>border: 3px dashed red;</pre><p><b>ពន្យល់៖</b> width = 3px, style = dashed, color = red។</p></div>
+      </details>
+      <details>
+        <summary>២. ធ្វើឲ្យមានស៊ុមតែផ្នែកខាងក្រោម កម្រាស់ 2px ពណ៌ប្រផេះ។</summary>
+        <div class="ans"><pre>border-bottom: 2px solid gray;</pre><p><b>ពន្យល់៖</b> ជ្រុងដែលមិនសរសេរ នឹងគ្មានស៊ុម។</p></div>
+      </details>
+      <details>
+        <summary>៣. ហេតុអ្វី <code>border: 5px red;</code> មិនបង្ហាញស៊ុម?</summary>
+        <div class="ans"><p><b>ចម្លើយ៖</b> ព្រោះគ្មាន <code>border-style</code>។ តម្លៃលំនាំដើមគឺ <code>none</code>។ ត្រូវសរសេរ <code>border: 5px solid red;</code>។</p></div>
+      </details>
+      <details>
+        <summary>៤. ធ្វើឲ្យប្រអប់ការ៉េ 100px × 100px ក្លាយជារង្វង់។</summary>
+        <div class="ans"><pre>width: 100px;
+height: 100px;
+border-radius: 50%;</pre></div>
+      </details>
+      <details>
+        <summary>៥. <code>border-width: 2px 10px 4px 8px;</code> ជ្រុងណាមានកម្រាស់ប៉ុន្មាន?</summary>
+        <div class="ans"><p><b>ចម្លើយ៖</b> លើ = 2px, ស្ដាំ = 10px, ក្រោម = 4px, ឆ្វេង = 8px (តាមលំដាប់ទ្រនិចនាឡិកា)។</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section id="recap">
+    <div class="sec-head">
+      <div class="eyebrow">សង្ខេប</div>
+      <h2>អ្វីដែលបានរៀន</h2>
+    </div>
+    <div class="panel">
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>ន័យ</th><th>ឧទាហរណ៍</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">border-width</td><td>កម្រាស់</td><td class="mono">4px</td></tr>
+            <tr><td class="mono">border-style</td><td>រចនាប័ទ្ម (១០ យ៉ាង)</td><td class="mono">solid</td></tr>
+            <tr><td class="mono">border-color</td><td>ពណ៌</td><td class="mono">#2b59e0</td></tr>
+            <tr><td class="mono">border</td><td>ពាក្យខ្លី ៣ យ៉ាងរួមគ្នា</td><td class="mono">2px solid red</td></tr>
+            <tr><td class="mono">border-top / right / bottom / left</td><td>កំណត់ជ្រុងមួយ (៤ ជ្រុង)</td><td class="mono">border-top: 2px solid</td></tr>
+            <tr><td class="mono">border-radius</td><td>កាត់ជ្រុងមូល</td><td class="mono">12px</td></tr>
+            <tr><td class="mono">outline</td><td>បន្ទាត់ក្រៅប្រអប់</td><td class="mono">3px dashed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* jump buttons */
+  document.querySelectorAll("[data-t]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var el = document.getElementById(b.getAttribute("data-t"));
+      if (el) el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  });
+
+  /* ten styles */
+  var styleInfo = [
+    ["solid", "បន្ទាត់ត្រង់បន្តគ្នា។ ប្រើច្រើនជាងគេ។"],
+    ["dashed", "បន្ទាត់ដាច់ៗ។"],
+    ["dotted", "ចំណុចៗ។"],
+    ["double", "បន្ទាត់ពីរ។"],
+    ["groove", "ស៊ុមជ្រៅចូល ដូចឆ្លាក់។"],
+    ["ridge", "ស៊ុមលៀនចេញ ផ្ទុយពី groove។"],
+    ["inset", "ធ្វើឲ្យប្រអប់មើលទៅជ្រៅចូល។"],
+    ["outset", "ធ្វើឲ្យប្រអប់មើលទៅលៀនចេញ។"],
+    ["none", "មិនមានស៊ុម (តម្លៃលំនាំដើម)។"],
+    ["hidden", "លាក់ស៊ុម ដូច none ប៉ុន្តែខុសក្នុងតារាង។"]
+  ];
+  var grid = document.getElementById("stylegrid");
+  styleInfo.forEach(function (s) {
+    var card = document.createElement("div");
+    card.className = "style-card";
+    var stage = document.createElement("div");
+    stage.className = "stage";
+    var sample = document.createElement("div");
+    sample.className = "sample";
+    sample.style.setProperty("--st", s[0]);
+    stage.appendChild(sample);
+    var h = document.createElement("h3");
+    h.textContent = s[0];
+    var p = document.createElement("p");
+    p.textContent = s[1];
+    var code = document.createElement("code");
+    code.textContent = "border-style: " + s[0] + ";";
+    card.appendChild(stage); card.appendChild(h); card.appendChild(p); card.appendChild(code);
+    grid.appendChild(card);
+  });
+
+  /* four sides */
+  var sideNames = { top: "blue", right: "orange", bottom: "green", left: "purple" };
+  var on = { top: true, right: true, bottom: true, left: true };
+  var box = document.getElementById("sidebox");
+  var sideCode = document.getElementById("sidecode");
+  function renderSides() {
+    var order = ["top", "right", "bottom", "left"];
+    var cap = { top: "Top", right: "Right", bottom: "Bottom", left: "Left" };
+    var lines = [];
+    order.forEach(function (s) {
+      box.style["border" + cap[s] + "Width"] = on[s] ? "10px" : "0px";
+      if (on[s]) lines.push("border-" + s + ": 10px solid " + sideNames[s] + ";");
+    });
+    sideCode.textContent = lines.length ? lines.join("\n") : "/* មិនមានស៊ុមទេ */";
+  }
+  document.querySelectorAll(".tog").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var s = b.getAttribute("data-side");
+      on[s] = !on[s];
+      b.setAttribute("aria-pressed", on[s] ? "true" : "false");
+      renderSides();
+    });
+  });
+  renderSides();
+
+  /* playground */
+  var $ = function (id) { return document.getElementById(id); };
+  var pv = $("pv"), pout = $("pout");
+  function renderPlay() {
+    var w = $("pw").value, st = $("ps").value, col = $("pc").value, r = $("pr").value;
+    $("pwo").textContent = w + "px";
+    $("pro").textContent = r + "px";
+    var sides = [["top", $("ct")], ["right", $("cr")], ["bottom", $("cb")], ["left", $("cl")]];
+    var all = sides.every(function (x) { return x[1].checked; });
+    var lines = [];
+    ["Top", "Right", "Bottom", "Left"].forEach(function (c, i) {
+      var active = sides[i][1].checked;
+      pv.style["border" + c + "Width"] = active ? w + "px" : "0px";
+      pv.style["border" + c + "Style"] = st;
+      pv.style["border" + c + "Color"] = col;
+      if (active && !all) lines.push("border-" + sides[i][0] + ": " + w + "px " + st + " " + col + ";");
+    });
+    if (all) lines.push("border: " + w + "px " + st + " " + col + ";");
+    if (!lines.length) lines.push("/* មិនមានស៊ុមទេ */");
+    pv.style.borderRadius = r + "px";
+    if (Number(r) > 0) lines.push("border-radius: " + r + "px;");
+    pout.textContent = lines.join("\n");
+  }
+  ["pw", "ps", "pc", "pr", "ct", "cr", "cb", "cl"].forEach(function (id) {
+    $(id).addEventListener("input", renderPlay);
+    $(id).addEventListener("change", renderPlay);
+  });
+  renderPlay();
+
+  $("pcopy").addEventListener("click", function () {
+    var btn = $("pcopy");
+    function selectText() {
+      var range = document.createRange();
+      range.selectNodeContents(pout);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    function done(msg) {
+      btn.textContent = msg;
+      setTimeout(function () { btn.textContent = "ចម្លងកូដ"; }, 1600);
+    }
+    try {
+      navigator.clipboard.writeText(pout.textContent).then(function () {
+        done("បានចម្លង");
+      }, function () {
+        selectText(); done("សូមចម្លងដោយដៃ");
+      });
+    } catch (e) {
+      selectText(); done("សូមចម្លងដោយដៃ");
+    }
+  });
+})();
+</script>
+
+</body></html>
